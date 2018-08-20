@@ -1,6 +1,6 @@
 require 'csv'
-require_relative 'Employee'
-require_relative 'InputHandler'
+require_relative 'employee'
+require_relative 'input_handler'
 
 class String
   def pluralize(count)
