@@ -7,13 +7,12 @@ class String
     modified_string = self
     modified_string += 's' if count > 1
     modified_string
-  end  
+  end
 end
 # Program to read and write employee data files
 class EmployeeDataHandler
   def self.get_employee_hash_from_file(file_name)
     employeee_hash = {}
-    
     CSV.foreach(file_name) do |employee_data_array|
       employee_name = InputHandler.convert_to_valid_strip_string(employee_data_array[0])
       employee_id = InputHandler.convert_to_valid_integer(employee_data_array[1])
@@ -23,8 +22,6 @@ class EmployeeDataHandler
         employeee_hash[employee_designation] << Employee.new(employee_name, employee_id, employee_designation)
       end
     end
-    puts file_name
-    puts employeee_hash
     employeee_hash.sort
   end
 
@@ -33,8 +30,6 @@ class EmployeeDataHandler
   end
 
   def self.write_to_file(file_name, employeee_hash)
-    puts 'ssss'
-    puts file_name
     output_string = ''
     File.open(file_name, 'w') do |file|
       employeee_hash.each do |employee_designation, employee_data|
