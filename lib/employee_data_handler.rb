@@ -11,7 +11,7 @@ class String
 end
 # Program to read and write employee data files
 class EmployeeDataHandler
-  def self.get_employee_hash_from_file(file_name)
+  def get_employee_hash_from_file(file_name)
     employeee_hash = {}
     CSV.foreach(file_name) do |employee_data_array|
       employee_name = InputHandler.convert_to_valid_strip_string(employee_data_array[0])
@@ -25,11 +25,11 @@ class EmployeeDataHandler
     employeee_hash.sort
   end
 
-  def self.get_designation(employee_designation, employee_count)
+  def get_designation(employee_designation, employee_count)
     employee_designation.pluralize(employee_count)
   end
 
-  def self.write_to_file(file_name, employeee_hash)
+  def write_to_file(file_name, employeee_hash)
     output_string = ''
     File.open(file_name, 'w') do |file|
       employeee_hash.each do |employee_designation, employee_data|
