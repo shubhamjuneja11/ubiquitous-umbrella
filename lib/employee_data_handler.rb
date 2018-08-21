@@ -1,7 +1,6 @@
 require 'csv'
 require_relative 'employee'
-require_relative 'input_handler'
-
+require_relative 'file_exception'
 class String
   def pluralize(count)
     modified_string = self
@@ -14,12 +13,14 @@ class EmployeeDataHandler
   def get_employee_hash_from_file(file_name)
     employeee_hash = {}
     CSV.foreach(file_name) do |employee_data_array|
-      employee_name = InputHandler.convert_to_valid_strip_string(employee_data_array[0])
-      employee_id = InputHandler.convert_to_valid_integer(employee_data_array[1])
-      employee_designation = InputHandler.convert_to_valid_strip_string(employee_data_array[2])
+      employee_name = employee_data_array[0]
+      employee_id = employee_data_array[1]
+      employee_designation = employee_data_array[2]
       employeee_hash[employee_designation] ||= []
-      if InputHandler.validate_input_data?(employee_name, employee_id, employee_designation)
+      if employee_name && employee_id && employee_designation
         employeee_hash[employee_designation] << Employee.new(employee_name, employee_id, employee_designation)
+      else
+        raise FileDataInvalidException => exception_details
       end
     end
     employeee_hash.sort
