@@ -1,46 +1,42 @@
 require 'csv'
 require_relative 'employee'
 require_relative 'file_exception'
+
 class String
   def pluralize(count)
-    modified_string = self
-    modified_string += 's' if count > 1
-    modified_string
+    dup << 's' if count >1
   end
 end
+
 # Program to read and write employee data files
 class EmployeeDataHandler
   def get_employee_hash_from_file(file_name)
-    employeee_hash = {}
+    employee_hash = Hash.new { |hash, key| hash[key] = []}
     CSV.foreach(file_name) do |employee_data_array|
       employee_name = employee_data_array[0]
       employee_id = employee_data_array[1]
       employee_designation = employee_data_array[2]
-      employeee_hash[employee_designation] ||= []
       if employee_name && employee_id && employee_designation
-        employeee_hash[employee_designation] << Employee.new(employee_name, employee_id, employee_designation)
+        employee_hash[employee_designation] << Employee.new(employee_name, employee_id, employee_designation)
       else
-        raise FileDataInvalidException => exception_details
+        raise FileDataInvalidException
       end
     end
-    employeee_hash.sort
+    employee_hash.sort
   end
 
-  def get_designation(employee_designation, employee_count)
+  private def get_designation(employee_designation, employee_count)
     employee_designation.pluralize(employee_count)
   end
 
-  def write_to_file(file_name, employeee_hash)
-    output_string = ''
+  def write_to_file(file_name, employee_hash)
     File.open(file_name, 'w') do |file|
-      employeee_hash.each do |employee_designation, employee_data|
-        output_string += "\n" + get_designation(employee_designation, employee_data.count) + "\n"
+      employee_hash.each do |employee_designation, employee_data|
+        file.puts get_designation(employee_designation, employee_data.count)
         employee_data.each do |employee|
-          output_string += employee.to_s
-          output_string += "\n"
+          file.puts employee.to_s
         end
       end
-      file.puts output_string
     end
   end
 end
