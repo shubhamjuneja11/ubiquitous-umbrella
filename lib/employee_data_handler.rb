@@ -3,17 +3,20 @@ require_relative 'employee'
 
 class String
   def pluralize(count)
-    dup << 's' if count >1
+    dup << 's' if count > 1
   end
 end
 
 # Program to read and write employee data files
 class EmployeeDataHandler
+  OUTPUT_FILE_SUFFIX = '_output.txt'
   def get_data_file(file_name)
+    output_file_path = "#{File.dirname(file_name)}/#{File.basename(file_name, ".*")}#{OUTPUT_FILE_SUFFIX}"
+    puts output_file_path
+    puts file_name
     if File.file?(file_name)
       employee_hash = get_employee_hash_from_file(file_name)
-      output_file = File.dirname(file_name) + '/employee_data.txt'
-      write_to_file(output_file, employee_hash)
+      write_to_file(output_file_path, employee_hash)
     end
   end
 
