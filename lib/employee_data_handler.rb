@@ -1,6 +1,5 @@
 require 'csv'
 require_relative 'employee'
-require_relative 'file_exception'
 
 class String
   def pluralize(count)
@@ -10,7 +9,15 @@ end
 
 # Program to read and write employee data files
 class EmployeeDataHandler
-  def get_employee_hash_from_file(file_name)
+  def get_data_file(file_name)
+    if File.file?(file_name)
+      employee_hash = get_employee_hash_from_file(file_name)
+      output_file = File.dirname(file_name) + '/employee_data.txt'
+      write_to_file(output_file, employee_hash)
+    end
+  end
+
+  private def get_employee_hash_from_file(file_name)
     employee_hash = Hash.new { |hash, key| hash[key] = []}
     CSV.foreach(file_name) do |employee_data_array|
       employee_name = employee_data_array[0]
@@ -18,8 +25,6 @@ class EmployeeDataHandler
       employee_designation = employee_data_array[2]
       if employee_name && employee_id && employee_designation
         employee_hash[employee_designation] << Employee.new(employee_name, employee_id, employee_designation)
-      else
-        raise FileDataInvalidException
       end
     end
     employee_hash.sort

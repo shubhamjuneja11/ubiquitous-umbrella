@@ -1,8 +1,7 @@
 require_relative '../lib/employee_data_handler'
 employee_data_handler = EmployeeDataHandler.new
-begin
-  employee_hash = employee_data_handler.get_employee_hash_from_file('employee_data.csv')
-  employee_data_handler.write_to_file('employee_categories.txt', employee_hash)
-rescue FileDataInvalidException => exception_details
-  puts exception_details
+if ARGV[0] && employee_data_handler.get_data_file(ARGV[0])
+  puts 'File created'
+else
+  puts 'Invalid path'
 end
